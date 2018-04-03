@@ -6,7 +6,7 @@ However, if we only consider the intensity of burglary in a certain region, it m
 Therefore, I would like to combine the Taipei city surveillance camera data with house burglary data to analyze because I think surveillance system plays an important role of preventing crime and also breaking cases. 
 
 
->* What I do: <br />
+>* What I do: 
 1. Burglary Map <br />
 2. Nearby Survalliance Cameraa (within 1 km) VS Bulgary Repeated Times Analysis <br />
 3. Burglary Rate Prediction (using Markov chain Monte Carlo)
