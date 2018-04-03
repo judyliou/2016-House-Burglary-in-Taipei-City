@@ -5,11 +5,9 @@ library(geosphere)
 library(dplyr)
 library(ggmap)
 
-d <- read.csv("D:\\祐瑄\\台大\\Course\\大四\\QBS\\individual project\\edited data\\data_new.csv")
-#d$theftRate_percent <- d$theftRate_percent*10
-#d$househundred <- as.integer(round(d$househundred/10)) #thousand
-theft_105 <- read.csv("D:\\祐瑄\\台大\\Course\\大四\\QBS\\individual project\\edited data\\theft105_new.csv")
-surv_loc <- read.csv("D:\\祐瑄\\台大\\Course\\大四\\QBS\\individual project\\surveillance.csv")
+d <- read.csv("data_new.csv")
+theft_105 <- read.csv("theft105_new.csv")
+surv_loc <- read.csv("surveillance.csv")
 dist_name <- d$dist_eng
 distList <- as.data.frame(table(theft_105$dist))
 colnames(distList) <- c("dist","freq")
@@ -44,7 +42,6 @@ postcheck <- function( fit , x , prob=0.89 , window=20 , n=1000 , col=rangi2 , .
   }
   
   # compute posterior predictions for each case
-  
   mu <- apply( pred , 2 , mean )
   mu.PI <- apply( pred , 2 , PI , prob=prob )
   y.PI <- apply( sims , 2 , PI , prob=prob )
