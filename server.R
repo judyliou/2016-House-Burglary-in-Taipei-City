@@ -6,6 +6,8 @@ library(dplyr)
 library(ggmap)
 
 d <- read.csv("D:\\祐瑄\\台大\\Course\\大四\\QBS\\individual project\\edited data\\data_new.csv")
+#d$theftRate_percent <- d$theftRate_percent*10
+#d$househundred <- as.integer(round(d$househundred/10)) #thousand
 theft_105 <- read.csv("D:\\祐瑄\\台大\\Course\\大四\\QBS\\individual project\\edited data\\theft105_new.csv")
 surv_loc <- read.csv("D:\\祐瑄\\台大\\Course\\大四\\QBS\\individual project\\surveillance.csv")
 dist_name <- d$dist_eng
@@ -127,27 +129,26 @@ postcheck <- function( fit , x , prob=0.89 , window=20 , n=1000 , col=rangi2 , .
 }
 
 #District Model
-m7.2 <- map(
+m7.2 <- map2stan(
   alist(
     theft105 ~ dbinom(househundred, p) ,
     logit(p) <- a + bC*camDen + bP*policeStation + bM*log(mid.low.income105) 
     + bS*surv.avg + bD*DisposableInc,
-    a ~ dnorm(0,0.1),
-    c(bC, bM, bD) ~ dnorm(0,0.3),
-    c(bP, bS) ~ dnorm(0, 0.1)
+    a ~ dnorm(0,1),
+    c(bC, bP, bM, bS, bD) ~ dnorm(0,0.5)
   ),
-  data=d#,iter = 5000, warmup = 2500, chains = 2
+  data=d,iter = 5000, warmup = 2500, chains = 2
   )
 
 #Nearby Survalliance Camera Model
-m.surv.dist5 <- map(
+m.surv.dist5 <- map2stan(
   alist(
     totalSurv ~ dpois(lambda) ,
     log(lambda) <- a[dist] + bT[dist]*times,
-    a[dist] ~ dnorm(0,5),
-    bT[dist] ~ dnorm(0,0.3)
+    a[dist] ~ dnorm(0,100),
+    bT[dist] ~ dnorm(0,10)
   ),
-  data=theft_105#, iter = 1200, warmup = 600, chains = 2
+  data=theft_105, iter = 1200, warmup = 600, chains = 2
   )
 
 
@@ -217,14 +218,14 @@ function(input, output){
     survDen.seq <- seq( from=0 , to=3 , length.out=100 )
     pred1 <- data.frame(camDen = survDen.seq,
                         policeStation = input$station,
-                        mid.low.income105 = input$lowIncome,
-                        surv.avg = input$avgSurv,
+                        mid_low_income105 = input$lowIncome,
+                        surv_avg = input$avgSurv,
                         DisposableInc = input$disposable)
     
     point.pred1 <- data.frame(camDen = input$survDen,
                               policeStation = input$station,
-                              mid.low.income105 = input$lowIncome,
-                              surv.avg = input$avgSurv,
+                              mid_low_income105 = input$lowIncome,
+                              surv_avg = input$avgSurv,
                               DisposableInc = input$disposable)
     
     mu <- link(m7.2, data = pred1)
