@@ -8,7 +8,7 @@ Therefore, I would like to combine the Taipei city surveillance camera data with
 
 >* What I do: <br />
 >1. Burglary Map <br />
->2. Nearby Survalliance Cameraa (within 1 km) VS Bulgary Repeated Times Analysis <br />
+>2. Nearby Surveillance Cameras (within 1 km) VS Burglary Repeated Times Analysis <br />
 >3. Burglary Rate Prediction (using Markov chain Monte Carlo)
 
 <p>
